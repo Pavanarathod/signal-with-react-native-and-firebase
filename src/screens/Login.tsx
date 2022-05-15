@@ -3,10 +3,13 @@ import React, { useRef, useState } from "react";
 import { Button, Input, Image } from "@rneui/base";
 import { StatusBar } from "expo-status-bar";
 import { KeyboardAvoidingView } from "react-native";
+import { AuthNavPrams } from "../AppParamsList/AppPramsLIst";
 
-const Login: React.FC = () => {
+const Login: React.FC<AuthNavPrams<"Login">> = ({ navigation }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const signIn = (): void => {};
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -48,9 +51,7 @@ const Login: React.FC = () => {
         containerStyle={styles.button}
         title="Register"
         type="outline"
-        onPress={() => {
-          console.log("working..");
-        }}
+        onPress={() => navigation.navigate("Register")}
       />
     </KeyboardAvoidingView>
   );
@@ -66,6 +67,11 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "white",
   },
-  inputContainer: {},
-  button: {},
+  inputContainer: {
+    width: 300,
+  },
+  button: {
+    width: 200,
+    marginTop: 10,
+  },
 });
