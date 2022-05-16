@@ -1,8 +1,10 @@
 import { View, Text, KeyboardAvoidingView, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { Button, Input } from "@rneui/base";
 import { AuthNavPrams } from "../AppParamsList/AppPramsLIst";
-import { useForm, Controller, SubmitErrorHandler } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../database/firebase";
 
 const Register: React.FC<AuthNavPrams<"Register">> = ({ navigation }) => {
   const {
@@ -11,7 +13,21 @@ const Register: React.FC<AuthNavPrams<"Register">> = ({ navigation }) => {
     formState: { errors, isValid },
   } = useForm({ mode: "onBlur" });
 
-  const onSubmit = (data: any) => console.log(data);
+  const register = async (data: any) => {
+    // if (!data) return;
+    // await createUserWithEmailAndPassword(auth, data.email, data.password)
+    //   .then(async (authUser) => {
+    //     if (authUser.user) {
+    //       await updateProfile(auth.currentUser, {
+    //         displayName: data?.userName,
+    //       })
+    //         .then(() => {})
+    //         .catch(() => alert("Can't update the user profile"));
+    //     }
+    //     console.log(authUser.user);
+    //   })
+    //   .catch((error) => alert(error.message));
+  };
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -28,7 +44,6 @@ const Register: React.FC<AuthNavPrams<"Register">> = ({ navigation }) => {
           name="userName"
           render={({ field: { value, onChange, onBlur } }) => (
             <Input
-              style={styles.inputArea}
               placeholder="User name"
               value={value}
               onChangeText={(value) => onChange(value)}
@@ -65,9 +80,30 @@ const Register: React.FC<AuthNavPrams<"Register">> = ({ navigation }) => {
         {errors.email && (
           <Text style={styles.errorMessage}>Email is required</Text>
         )}
+        <Controller
+          control={control}
+          name="password"
+          render={({ field: { value, onChange, onBlur } }) => (
+            <Input
+              placeholder="Enter you'r password"
+              autoFocus
+              value={value}
+              onChangeText={(value) => onChange(value)}
+            />
+          )}
+          rules={{
+            required: {
+              value: true,
+              message: "password is required",
+            },
+          }}
+        />
+        {errors.password && (
+          <Text style={styles.errorMessage}>Email is required</Text>
+        )}
       </View>
       <View style={styles.buttonContainer}>
-        <Button onPress={handleSubmit(onSubmit)} title="Register" />
+        <Button onPress={handleSubmit(register)} title="Register" />
         <View style={{ width: 20, height: 20 }} />
         <Button
           style={{
